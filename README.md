@@ -1,26 +1,19 @@
 # notes
-Ссылка на сайт:
+Приложение на vue для ведения заметок
+
+- отзывчивая верстка
+- сохранение состояния в LocalStorage
+- текстовый поиск заметок
+- wip: возможность измение цвета фона карточки 
+- wip: передвижение карточек 
+- wip: облако/список тегов
+- wip: корзина для удаленных карточек
+
+# demo
 https://alinamz.github.io/notes-app/
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
+# dev
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
