@@ -1,4 +1,6 @@
 # notes
+Ссылка на сайт:
+https://alinamz.github.io/notes-app/
 
 ## Project setup
 ```

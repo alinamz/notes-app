@@ -67,7 +67,11 @@ export default {
     searchNotes() {
       if (this.inputStr) {
         return this.notes?.filter((el) => {
-          return ( el.tag?.includes(this.inputStr.toLowerCase()) || el.title?.includes(this.inputStr.toLowerCase()) || el.body?.includes(this.inputStr.toLowerCase()));
+          return (
+            el.tag?.includes(this.inputStr.toLowerCase()) ||
+            el.title?.includes(this.inputStr.toLowerCase()) ||
+            el.body?.includes(this.inputStr.toLowerCase())
+          );
         });
       }
       return this.notes;
@@ -89,11 +93,13 @@ export default {
 </script>
 
 <style>
-input::-webkit-input-placeholder { color: #be935a; }
+input::-webkit-input-placeholder {
+  color: #be935a;
+}
 h1 {
   color: #591c12;
 }
-.note-add-image:hover{
+.note-add-image:hover {
   width: 60px;
   transition-duration: 250ms;
   transition-timing-function: linear;
@@ -119,7 +125,7 @@ h1 {
   border: 1.5px solid #be935a;
   background-color: #faf6d2;
   font-size: 12px;
- color: #be935a;
+  color: #be935a;
   outline: none;
 }
 .search__img {

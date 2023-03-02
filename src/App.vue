@@ -21,6 +21,7 @@ body {
   font-weight: 400;
   font-display: swap;
   margin: 0;
+  background-color: #ffff00;
 }
 #app {
   -webkit-font-smoothing: antialiased;
@@ -30,5 +31,6 @@ body {
   background-color: #faf6d2;
   max-width: 1280px;
   min-height: 100vh;
+  margin: auto;
 }
 </style>
