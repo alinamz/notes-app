@@ -1,9 +1,11 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <div class="hashtag">{{ "#" + hash }}</div>
+    <div
+    class="hashtag">{{ "#" + hash }}</div>
 </template>
 
 <script>
+
 export default {
    props: {
     hash: {

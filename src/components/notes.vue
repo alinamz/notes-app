@@ -1,4 +1,3 @@
-
 <template>
   <div class="container">
     <h1>Ваши заметки</h1>
@@ -25,6 +24,7 @@
         v-for="(note, id) of searchNotes"
         :key="note.id"
         :note="note"
+        @changeBackground="changeBackground"
         @tagChange="tagChange(id, $event)"
         @noteChange="noteChange(id, $event)"
         @deleteNote="deleteNote"
@@ -54,13 +54,20 @@ export default {
     },
     addNote() {
       let ID = this.notes.length + 1;
-      this.notes.push({ title: "Заметка", body: "", tag: [], id: ID });
+      this.notes.push({ title: "Заметка", body: "", tag: [], id: ID, color: "" });
     },
     noteChange(id, newText) {
       this.notes[id].body = newText;
     },
     tagChange(id, newTag) {
       this.notes[id].tag.push(newTag);
+    },
+    changeBackground(id, background) {
+      this.notes.forEach((element) => {
+        if(element.id === id) {
+          element.color = background;
+        }
+      })
     },
   },
   computed: {
@@ -146,7 +153,6 @@ h1 {
   flex-wrap: wrap;
 }
 .note {
-  background-color: #ffff00;
   border-radius: 8px;
   width: 280px;
   margin: 0 10px 20px;

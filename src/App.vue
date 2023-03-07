@@ -5,7 +5,6 @@
 <script>
 import notes from "./components/notes.vue";
 
-
 export default {
   name: "App",
   components: {
@@ -21,7 +20,7 @@ body {
   font-weight: 400;
   font-display: swap;
   margin: 0;
-  background-color: #ffff00;
+  background-color: #faf6d2;
 }
 #app {
   -webkit-font-smoothing: antialiased;
