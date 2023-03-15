@@ -203,6 +203,7 @@ h1 {
 
 .add-note__title_note {
   margin-left: 50px;
+  cursor: pointer;
 }
 
 .search__input {

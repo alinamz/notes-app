@@ -25,7 +25,7 @@
     <transition name="fade">
       <ul v-if="hidden" class="list">
         <div @click="showAllNotes" class="allNotes">&#128161; ЗАМЕТКИ</div>
-        <li @click="filteringList(hash)" v-for="(hash, index) in listTags"
+        <li class="tag" @click="filteringList(hash)" v-for="(hash, index) in listTags"
           :key="index"
           :hash="hash">
           <img src="../images/hash.png" alt="hashtag" class="hash__img"/>
@@ -72,6 +72,13 @@ export default {
 </script>
 
 <style scoped>
+
+.tag {
+  cursor: pointer;
+}
+.tag:hover {
+  opacity: 0.5;
+}
 .allNotes, .basket {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -80,16 +87,16 @@ export default {
   margin-bottom: 10px;
   text-align: initial;
   padding-left: 5px;
+  cursor: pointer;
+}
+
+.allNotes:hover, .basket:hover {
+  opacity: 0.8;
 }
 .hash__img {
   width: 20px;
   height: 20px;
 }
-
-.hash__img:hover {
-  opacity: 0.3;
-}
-
 .active {
   background-color: #e1ddbd;
 }
