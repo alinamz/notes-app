@@ -50,6 +50,7 @@
 import backgroundList from "./background-list.vue";
 import hashtag from "./hashtag.vue";
 
+
 export default {
   components: { hashtag, backgroundList },
   name: "note-vue",
@@ -92,7 +93,6 @@ export default {
   -webkit-appearance: none;
   color: #623c18;
   width: 94%;
-  height: 100%;
   border: none;
   resize: none;
   margin-top: 30px;

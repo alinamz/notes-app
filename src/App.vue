@@ -5,10 +5,11 @@
 <script>
 import notes from "./components/notes.vue";
 
+
 export default {
   name: "App",
   components: {
-    notes,
+    notes
   },
 };
 </script>

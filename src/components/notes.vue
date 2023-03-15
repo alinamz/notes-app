@@ -1,34 +1,44 @@
 <template>
-  <div class="container">
-    <h1>Ваши заметки</h1>
+  <div v-bind:class="[show ? 'container' : '']">
+    <burger
+      :listTags="listTags"
+      :show="show"
+      @changeShow="changeShow"
+      @showAllNotes="showAllNotes"
+      @filteringNotes="filteringNotes"
+    ></burger>
 
-    <div class="container__buttons">
-      <button class="add-note__title" @click="addNote">
-        <img class="note-add-image" src="../images/note-add.png" />
-      </button>
+    <div v-bind:class="[show ? 'container__grid' : '']">
+      <h1>Ваши заметки</h1>
 
-      <div class="search">
-        <input
-          v-model="inputStr"
-          class="search__input"
-          placeholder="Начнем поиск по ключевым словам!"
-        />
-        <button class="add-note__title">
-          <img class="search__img" src="../images/search.png" />
+      <div class="container__buttons">
+        <button class="add-note__title add-note__title_note" @click="addNote">
+          <img class="note-add-image" src="../images/note-add.png" />
         </button>
+        <div class="search">
+          <input
+            v-model="inputStr"
+            class="search__input"
+            placeholder="Начнем поиск по ключевым словам!"
+          />
+          <button class="add-note__title">
+            <img class="search__img" src="../images/search.png" />
+          </button>
+        </div>
       </div>
-    </div>
-    <div class="notes">
-      <note
-        class="note"
-        v-for="(note, id) of searchNotes"
-        :key="note.id"
-        :note="note"
-        @changeBackground="changeBackground"
-        @tagChange="tagChange(id, $event)"
-        @noteChange="noteChange(id, $event)"
-        @deleteNote="deleteNote"
-      />
+
+      <div class="notes">
+        <note
+          class="note"
+          v-for="(note, id) of searchNotes"
+          :key="note.id"
+          :note="note"
+          @changeBackground="changeBackground"
+          @tagChange="tagChange(id, $event)"
+          @noteChange="noteChange(id, $event)"
+          @deleteNote="deleteNote"
+        />
+      </div>
     </div>
   </div>
 
@@ -37,14 +47,19 @@
 
 <script>
 import note from "./note";
+import burger from "./burger-menu.vue";
 
 export default {
   name: "notes-vue",
-  components: { note },
+  components: { note, burger },
   data() {
     return {
       inputStr: "",
       notes: [],
+      show: false,
+      listTags: [],
+      tag: "",
+      allNotes: true,
     };
   },
   methods: {
@@ -54,25 +69,69 @@ export default {
     },
     addNote() {
       let ID = this.notes.length + 1;
-      this.notes.push({ title: "Заметка", body: "", tag: [], id: ID, color: "" });
+      this.notes.push({
+        title: "Заметка",
+        body: "",
+        tag: [],
+        id: ID,
+        color: "",
+      });
     },
     noteChange(id, newText) {
       this.notes[id].body = newText;
     },
     tagChange(id, newTag) {
       this.notes[id].tag.push(newTag);
+      if (Object.values(this.listTags).includes(newTag)) {
+        return this.listTags;
+      } else {
+        this.listTags.unshift(newTag);
+      }
     },
     changeBackground(id, background) {
       this.notes.forEach((element) => {
-        if(element.id === id) {
+        if (element.id === id) {
           element.color = background;
         }
-      })
+      });
+    },
+    changeShow(show) {
+      this.show = show;
+    },
+    filteringNotes(value) {
+      this.tag = value;
+      this.allNotes = false;
+    },
+    showAllNotes() {
+      this.allNotes = true;
     },
   },
   computed: {
     searchNotes() {
-      if (this.inputStr) {
+      if (this.allNotes == false) {
+        if (this.tag) {
+          let a = this.notes?.filter((el) => el.tag?.includes(this.tag));
+          if (this.inputStr) {
+            return a?.filter((el) => {
+              return (
+                el.tag?.includes(this.inputStr.toLowerCase()) ||
+                el.title?.includes(this.inputStr.toLowerCase()) ||
+                el.body?.includes(this.inputStr.toLowerCase())
+              );
+            });
+          } else {
+            return a;
+          }
+        } else if (this.inputStr) {
+          return this.notes?.filter((el) => {
+            return (
+              el.tag?.includes(this.inputStr.toLowerCase()) ||
+              el.title?.includes(this.inputStr.toLowerCase()) ||
+              el.body?.includes(this.inputStr.toLowerCase())
+            );
+          });
+        }
+      } else if (this.inputStr) {
         return this.notes?.filter((el) => {
           return (
             el.tag?.includes(this.inputStr.toLowerCase()) ||
@@ -80,18 +139,22 @@ export default {
             el.body?.includes(this.inputStr.toLowerCase())
           );
         });
+      } else {
+        return this.notes;
       }
       return this.notes;
     },
   },
   mounted() {
     this.notes = JSON.parse(localStorage.getItem("notes")) || [];
+    this.listTags = JSON.parse(localStorage.getItem("tagsList")) || [];
   },
   watch: {
     notes: {
       handler(notes, oldValue) {
         console.log(notes, oldValue);
         localStorage.setItem("notes", JSON.stringify(notes));
+        localStorage.setItem("tagsList", JSON.stringify(this.listTags));
       },
       deep: true,
     },
@@ -115,13 +178,31 @@ h1 {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 90%;
+  margin: 0;
+  width: 100%;
+  height: 80px;
+}
+
+.container {
+  display: flex;
+  flex-flow: row wrap;
 }
 
 .search {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.container__grid {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin-left: auto;
+}
+
+.add-note__title_note {
+  margin-left: 50px;
 }
 
 .search__input {
@@ -139,18 +220,17 @@ h1 {
   width: 40px;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 20px;
+.search {
+  margin-right: 50px;
 }
+
 .notes {
   list-style-type: none;
   display: flex;
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
+  grid-area: main;
 }
 .note {
   border-radius: 8px;
@@ -159,7 +239,6 @@ h1 {
   box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.2);
   transition: all 0.5s;
   cursor: pointer;
-  height: 100%;
   min-height: 170px;
 }
 
