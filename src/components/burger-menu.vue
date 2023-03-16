@@ -31,7 +31,7 @@
           <img src="../images/hash.png" alt="hashtag" class="hash__img"/>
           {{ hash }}
         </li>
-        <div class="basket"> &#x1f5d1; КОРЗИНА</div>
+        <div class="basket" @click="hiddenDeletedNotes"> &#x1f5d1; КОРЗИНА</div>
       </ul>
     </transition>
   </nav>
@@ -66,6 +66,9 @@ export default {
     },
     showAllNotes() {
       this.$emit('showAllNotes')
+    },
+    hiddenDeletedNotes() {
+      this.$emit('hiddenDeletedNotes')
     }
   }
 };

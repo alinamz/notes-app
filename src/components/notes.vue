@@ -3,6 +3,7 @@
     <burger
       :listTags="listTags"
       :show="show"
+      @hiddenDeletedNotes="hiddenDeletedNotes"
       @changeShow="changeShow"
       @showAllNotes="showAllNotes"
       @filteringNotes="filteringNotes"
@@ -11,7 +12,7 @@
     <div v-bind:class="[show ? 'container__grid' : '']">
       <h1>Ваши заметки</h1>
 
-      <div class="container__buttons">
+      <div v-if="!showDelete" class="container__buttons">
         <button class="add-note__title add-note__title_note" @click="addNote">
           <img class="note-add-image" src="../images/note-add.png" />
         </button>
@@ -27,8 +28,14 @@
         </div>
       </div>
 
-      <div class="notes">
+      <button @click="removeAllNotes" v-else class="deleted-all-notes">
+        <img src="../images/car64.png" alt="backet" class="img-backet" />
+        <p class="text">Очистить корзину</p>
+      </button>
+
+      <div v-if="!showDelete" class="notes">
         <note
+          showDelete="showDelete"
           class="note"
           v-for="(note, id) of searchNotes"
           :key="note.id"
@@ -37,6 +44,15 @@
           @tagChange="tagChange(id, $event)"
           @noteChange="noteChange(id, $event)"
           @deleteNote="deleteNote"
+        />
+      </div>
+
+      <div v-else class="notes">
+        <note
+          class="note"
+          v-for="note of deletedNotes"
+          :key="note.id"
+          :note="note"
         />
       </div>
     </div>
@@ -60,12 +76,15 @@ export default {
       listTags: [],
       tag: "",
       allNotes: true,
+      deletedNotes: [],
+      showDelete: false,
     };
   },
   methods: {
     deleteNote(note) {
       let updateNotes = this.notes.filter((el) => el.id !== note.id);
       this.notes = updateNotes;
+      this.deletedNotes.push(note);
     },
     addNote() {
       let ID = this.notes.length + 1;
@@ -104,7 +123,15 @@ export default {
     },
     showAllNotes() {
       this.allNotes = true;
+      this.showDelete = false;
     },
+    hiddenDeletedNotes() {
+      this.showDelete = true;
+    },
+    removeAllNotes() {
+    this.deletedNotes = [];
+    localStorage.removeItem("deletedNotes")
+    }
   },
   computed: {
     searchNotes() {
@@ -148,6 +175,7 @@ export default {
   mounted() {
     this.notes = JSON.parse(localStorage.getItem("notes")) || [];
     this.listTags = JSON.parse(localStorage.getItem("tagsList")) || [];
+    this.deletedNotes = JSON.parse(localStorage.getItem("deletedNotes")) || [];
   },
   watch: {
     notes: {
@@ -155,6 +183,7 @@ export default {
         console.log(notes, oldValue);
         localStorage.setItem("notes", JSON.stringify(notes));
         localStorage.setItem("tagsList", JSON.stringify(this.listTags));
+        localStorage.setItem("deletedNotes", JSON.stringify(this.deletedNotes));
       },
       deep: true,
     },
@@ -168,6 +197,37 @@ input::-webkit-input-placeholder {
 }
 h1 {
   color: #591c12;
+}
+
+.img-backet {
+  width: 20%;
+}
+
+.text {
+  font-size: 20px;
+  font-family: "Itim";
+  margin-left: 15px;
+  color: #591c12;
+  margin: 0 0 0 15px;
+  border-radius: 1px;
+  border: 2px solid;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 27px;
+  padding-right: 11px;
+  padding-left: 11px;
+}
+.deleted-all-notes {
+  width: 41%;
+  height: 50px;
+  margin-left: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 10px;
+  margin-top: 15px;
+  display: flex;
+  border: none;
+  align-items: center;
+  background-color: #faf6d2;
 }
 .note-add-image:hover {
   width: 60px;

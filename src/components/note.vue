@@ -4,15 +4,16 @@
     <div>
       <span class="note-body__delete" @click="deleteNote(this.note)">X</span>
     </div>
-    <button 
+    <button
+      v-if="showDelete"
       v-bind:style="{ backgroundColor: newNote.color }"
       v-on:mouseover="show = !show"
-      class="note-body__backgrn">
-    </button>
-    <backgroundList
+      class="note-body__backgrn"
+    ></button>
+    <backgroundList 
       @changeBackground="changeBackground"
       v-if="show"
-      :key='note.key'
+      :key="note.key"
     ></backgroundList>
     <textarea
       v-bind:style="{ backgroundColor: newNote.color }"
@@ -50,7 +51,6 @@
 import backgroundList from "./background-list.vue";
 import hashtag from "./hashtag.vue";
 
-
 export default {
   components: { hashtag, backgroundList },
   name: "note-vue",
@@ -59,6 +59,9 @@ export default {
       type: Object,
       required: true,
     },
+    showDelete: {
+      type: Boolean,
+    }
   },
   data() {
     return {
@@ -86,7 +89,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style >
 .note-body__title {
   font-family: "Itim", sans-serif;
   background-color: #ffff00;
